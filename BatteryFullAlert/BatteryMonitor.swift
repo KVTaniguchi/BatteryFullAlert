@@ -12,35 +12,34 @@ import UIKit
 class BatteryMonitor {
     static let shared = BatteryMonitor()
     
-    private init() {
-        NotificationCenter.default.addObserver(self, selector: #selector(batteryLevelDidChange), name: .UIDeviceBatteryLevelDidChange, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(batteryStateDidChange), name: .UIDeviceBatteryStateDidChange, object: nil)
-    }
+    private init() {}
     
     func startMonitoring() {
         UIDevice.current.isBatteryMonitoringEnabled = true
     }
     
+    var batteryChargeLevelMessage: String {
+        return "Battery: \(batteryLevel)%"
+    }
+    
+    var batteryStateMessage: String {
+        switch batteryState {
+        case .unplugged:
+            return "Unplugged"
+        case .unknown:
+            return "Unknown"
+        case .charging:
+            return "Charging"
+        case .full:
+            return "Full"
+        }
+    }
+    
     var batteryLevel: Float {
-        return UIDevice.current.batteryLevel
+        return UIDevice.current.batteryLevel * 100.0
     }
     
     var batteryState: UIDeviceBatteryState {
         return UIDevice.current.batteryState
-    }
-    
-    @objc func batteryLevelDidChange() {
-        
-    }
-    
-    @objc func batteryStateDidChange(_ notification: Notification) {
-        switch batteryState {
-        case .unplugged, .unknown:
-            print("not charging")
-        case .charging:
-            print("charging")
-        case .full:
-            print("full")
-        }
     }
 }
