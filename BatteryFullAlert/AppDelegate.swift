@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import UserNotifications
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -24,12 +25,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.rootViewController = mainNav
         window?.makeKeyAndVisible()
         
+        registerForPushNotifications()
+        
         return true
     }
 
-    func applicationWillResignActive(_ application: UIApplication) {
-        BatteryCommunicator.shared.updateRemote()
-    }
+    func applicationWillResignActive(_ application: UIApplication) {}
 
     func applicationDidEnterBackground(_ application: UIApplication) {}
 
@@ -37,8 +38,43 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(_ application: UIApplication) {}
 
-    func applicationWillTerminate(_ application: UIApplication) {
-        BatteryCommunicator.shared.updateRemote()
+    func applicationWillTerminate(_ application: UIApplication) {}
+    
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        
+        let aps = userInfo["aps"] as! [String: AnyObject]
+        
+        // 1
+        // from RW tut, check if is a silent notif
+        if aps["content-available"] as? Int == 1 {
+
+        }
+        else  {
+            
+        }
+    }
+    
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        // get the device token out, stash it for use in the battery communicator
+    }
+    
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        print(error)
+    }
+    
+    func registerForPushNotifications() {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { [weak self] (granted, error) in
+            guard granted else { return }
+            
+            self?.getNotificationSettings()
+        }
+    }
+    
+    func getNotificationSettings() {
+        UNUserNotificationCenter.current().getNotificationSettings { (settings) in
+            guard settings.authorizationStatus == .authorized else { return }
+            UIApplication.shared.registerForRemoteNotifications()
+        }
     }
 
 }

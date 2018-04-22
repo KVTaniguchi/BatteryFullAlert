@@ -18,6 +18,7 @@ class BatteryAlertViewController: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(batteryLevelDidChange), name: .UIDeviceBatteryLevelDidChange, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(batteryStateDidChange), name: .UIDeviceBatteryStateDidChange, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(applicationWillResign), name: .UIApplicationWillResignActive, object: nil)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -61,10 +62,6 @@ class BatteryAlertViewController: UIViewController {
         fullSV.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -30).isActive = true
         fullSV.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 100).isActive = true
         fullSV.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -100).isActive = true
-        
-        // button to enable notifications
-        // toggle notify me at 100
-        // toogle notify me at ____ level
     }
     
     @objc func batteryLevelDidChange() {
@@ -73,6 +70,10 @@ class BatteryAlertViewController: UIViewController {
     
     @objc func batteryStateDidChange() {
         batteryStateLabel.text = BatteryMonitor.shared.batteryStateMessage
+    }
+    
+    @objc func applicationWillResign() {
+        BatteryCommunicator.shared.updateRemote()
     }
 }
 
