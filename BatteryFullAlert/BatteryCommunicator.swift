@@ -33,13 +33,8 @@ class BatteryCommunicator {
          - check state -
          */
         let currentBattery = BatteryMonitor.shared.batteryLevel
-        let currentDeviceUUID = UIDevice.current.identifierForVendor
         let currentDeviceModel = UIDevice.current.modelName
         
-        
-        print(currentBattery)
-        print(currentDeviceUUID?.uuidString ?? "")
-        print(currentDeviceModel)
         // post to service with device type
 
         // https://www.somethingsomething/api/batteryUpdate/create

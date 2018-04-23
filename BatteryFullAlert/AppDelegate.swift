@@ -42,15 +42,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         
-        let aps = userInfo["aps"] as! [String: AnyObject]
-        
-        // 1
-        // from RW tut, check if is a silent notif
-        if aps["content-available"] as? Int == 1 {
-
-        }
-        else  {
-            
+        if let aps = userInfo["aps"] as? [String: AnyObject] {
+            // 1
+            // from RW tut, check if is a silent notif
+            if aps["content-available"] as? Int == 1 {
+                
+            }
+            else  {
+                
+            }
         }
     }
     
