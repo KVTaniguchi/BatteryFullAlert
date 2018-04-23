@@ -55,6 +55,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        let tokenParts = deviceToken.map { data -> String in
+            return String(format: "%02.2hhx", data)
+        }
+        
+        BatteryCommunicator.shared.deviceToken = tokenParts.joined()
+        
         // get the device token out, stash it for use in the battery communicator
     }
     

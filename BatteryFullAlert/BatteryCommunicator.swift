@@ -17,6 +17,9 @@ enum KVNetworkError: Error {
 class BatteryCommunicator {
     static let shared = BatteryCommunicator()
     
+    // ugh
+    var deviceToken: String?
+    
     private init() {}
     
     func updateRemote() {
@@ -46,7 +49,7 @@ class BatteryCommunicator {
         
         let parameters: [String: Any] = ["batteryLevel": Double(currentBattery),
                                          "deviceType": currentDeviceModel.rawValue,
-                                         "deviceID": currentDeviceUUID?.uuidString ?? "",
+                                         "deviceID": deviceToken ?? "",
                                          "desiredCharge": 100.0]
         
         guard let body = try? JSONSerialization.data(withJSONObject: parameters, options: []) else {
